@@ -1,5 +1,7 @@
 Fyyur
 -----
+Important Note - NOT Uploaded the Environment Build Folder as part of this repository - as suggested in the student-faq page.  https://learn.udacity.com/project-review-faq
+
 
 ## Introduction
 
