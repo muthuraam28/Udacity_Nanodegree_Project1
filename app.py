@@ -14,7 +14,7 @@ from logging import Formatter, FileHandler
 from flask_wtf import Form
 from forms import *
 from datetime import datetime
-from mod import Venue, Artist, Shows, db
+from models import Venue, Artist, Shows, db
 from sqlalchemy import func
 from sqlalchemy.orm import joinedload
 
@@ -217,9 +217,9 @@ def create_venue_submission():
     form = VenueForm()
     return render_template('pages/venues.html')
 
-@app.route('/venues/<venue_id>', methods=['DELETE'])
+@app.route('/venues/<int:venue_id>/delete', methods=['DELETE'])
 def delete_venue(venue_id):
-  # SQLAlchemy ORM to delete a record. Handle cases where the session commit could fail.
+  
   try:
      result = Venue.query.filter_by(id=venue_id).first()
      Venue.query.filter_by(id=venue_id).delete()
