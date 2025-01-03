@@ -43,8 +43,9 @@
 		{% endif %}
 	</div>
 	<div class="col-sm-6">
-		<img src="{{ venue.image_link }}" alt="Venue Image" />
+		<img id="venue-image" src="{{ url_for('static',filename='img/venue-image.jpg') }}"  alt="Venue Image" />
 	</div>
+	
 </div>
 <section>
 	<h2 class="monospace">{{ venue.upcoming_shows_count }} Upcoming {% if venue.upcoming_shows_count == 1 %}Show{% else %}Shows{% endif %}</h2>

@@ -39,8 +39,9 @@
 		</p>
 		{% endif %}
 	</div>
+	
 	<div class="col-sm-6">
-		<img src="{{ artist.image_link }}" alt="Venue Image" />
+		<img id="venue-image" src="{{ url_for('static',filename='img/musicians-image.jpg') }}"  alt="Venue Image" />
 	</div>
 </div>
 <section>
@@ -73,6 +74,8 @@
 </section>
 
 <a href="/artists/{{ artist.id }}/edit"><button class="btn btn-primary btn-lg">Edit</button></a>
+
+<a href="/artists/{{ artist.id }}/delete"><button class="btn btn-primary btn-lg">Delete</button></a>
 
 {% endblock %}
 

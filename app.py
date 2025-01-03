@@ -3,6 +3,7 @@
 #----------------------------------------------------------------------------#
 
 import json
+import ast
 import dateutil.parser
 import babel
 from flask_migrate import Migrate
@@ -217,7 +218,7 @@ def create_venue_submission():
     form = VenueForm()
     return render_template('pages/venues.html')
 
-@app.route('/venues/<int:venue_id>/delete', methods=['DELETE'])
+@app.route('/venues/<int:venue_id>/delete', methods=['GET'])
 def delete_venue(venue_id):
   
   try:
@@ -379,6 +380,33 @@ def edit_artist_submission(artist_id):
 
   return redirect(url_for('show_artist', artist_id=artist_id))
 
+@app.route('/artists/<int:artist_id>/delete', methods=['GET'])
+def delete_artist_submission(artist_id):
+  # editing artist details
+
+  try:
+    artist = Artist.query.filter_by(id=artist_id).first()
+    old_name = artist.name
+  
+    try:
+      artist.looking_for_venues = True if request.form['seeking_venue'] == 'y' else False
+    except:
+      artist.looking_for_Talent = False
+    Artist.query.filter_by(id=artist_id).first()
+    Artist.query.filter_by(id=artist_id).delete()
+    db.session.commit()
+    flash('Artist: ' + old_name + ' was successfully deleted!')
+    data = Artist.query.all()
+    
+    
+  except:
+    db.session.rollback()
+    flash('An error occurred. Artist:' + old_name + ' is not deleted.')
+  finally:
+    db.session.close()
+
+  return render_template('pages/artists.html', artists=data)
+
 
 @app.route('/venues/<int:venue_id>/edit', methods=['GET'])
 def edit_venue(venue_id):
@@ -496,7 +524,7 @@ def shows():
   data = []
 
   for show in shows:
-    artist = Artist.query.filter_by(id=show.artist_id).first()
+    artist = Artist.query.filter_by(id=show.artist_id.first())
     data_dict = {
       'venue_id':show.venue_id,
       'venue_name': Venue.query.filter_by(id=show.venue_id).first().name,
@@ -504,7 +532,7 @@ def shows():
       'artist_name': artist.name,
       'artist_image_link': artist.image_link,
       'start_time': str(show.start_time)
-    }
+      }
     data.append(data_dict)
 
   return render_template('pages/shows.html', shows=data)
@@ -522,23 +550,24 @@ def create_show_submission():
 
   if form.validate():
     try:
-      new_Show = Shows(venue_id=request.form['venue_id'],
-                          artist_id=request.form['artist_id'],
+      venueid=ast.literal_eval(request.form['venue_id'])
+      artistid=ast.literal_eval(request.form['artist_id'])
+      db.session.add(Shows(int(venueid),int(artistid),
                           start_time=datetime(request.form['start_time'])
-                          )
-      db.session.add(new_Show)
+                          ))
       db.session.commit()
       flash('Show was successfully listed!')
-
-    except:
+      
+    except Exception as e:
       db.session.rollback()
-      flash('An error occurred. Show could not be listed.')
+
+      flash('An error occurred. Show could not be listed.' + str(e))
       message = []
       for field, errors in form.errors.items():
         for error in errors:
           message.append(f'{field}: {error}')
     
-      flash('Please fix the following errors: '+', '.join(message))
+      flash('Please fix the following errors: '+', '+ str(e))
       form = ShowForm()
       
     finally:

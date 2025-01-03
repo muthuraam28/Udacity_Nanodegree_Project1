@@ -33,6 +33,12 @@ class Artist(db.Model):
     seeking_description = db.Column(db.String(500))
     
 
+#class Shows(db.Model):
+#    __tablename__ = 'Shows'
+#    venue_id = db.Column(db.Integer, db.ForeignKey('Venue.id'),primary_key=True)
+#    artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id'),primary_key=True)
+#    start_time = db.Column('start_time',db.DateTime)
+
 Shows = db.Table('Shows',
                 db.Column('venue_id',db.Integer, db.ForeignKey('Venue.id'), primary_key=True),
                 db.Column('artist_id',db.Integer, db.ForeignKey('Artist.id'), primary_key=True),
