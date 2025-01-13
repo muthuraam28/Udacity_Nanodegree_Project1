@@ -38,8 +38,18 @@ class Artist(db.Model):
 #    venue_id = db.Column(db.Integer, db.ForeignKey('Venue.id'),primary_key=True)
 #    artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id'),primary_key=True)
 #    start_time = db.Column('start_time',db.DateTime)
+class Shows(db.Model):
+        __tablename__='Shows'
+        venue_id = db.Column(db.Integer, db.ForeignKey('Venue.id'), primary_key=True)
+        artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id'), primary_key=True)
+        start_time = db.Column(db.DateTime)
 
-Shows = db.Table('Shows',
-                db.Column('venue_id',db.Integer, db.ForeignKey('Venue.id'), primary_key=True),
-                db.Column('artist_id',db.Integer, db.ForeignKey('Artist.id'), primary_key=True),
-                db.Column('start_time',db.DateTime))
+def __init__(self, venue_id, artist_id, start_time):
+    self.venue_id = venue_id
+    self.artist_id = artist_id
+    self.start_time = start_time
+
+     
+        #        db.Column('venue_id',db.Integer, db.ForeignKey('Venue.id'), primary_key=True),
+        #        db.Column('artist_id',db.Integer, db.ForeignKey('Artist.id'), primary_key=True),
+        #        db.Column('start_time',db.DateTime))
